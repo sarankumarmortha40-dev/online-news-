@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ONLINE NEWS</title>
+  <!-- External CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+<body>
+  <header>
+    <h1>ONLINE NEWS</h1>
+    <p>Reliable News Site For Users</p>
+  </header>
+
+  <nav>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('world') }}">World</a>
+    <a href="#">Politics</a>
+    <a href="#">Sports</a>
+    <a href="#">Entertainment</a>
+    <a href="#">Tech</a>
+    <a href="#">Geopolitics</a>
+    <a href="#">International</a>
+  </nav>
+
+  <div class="news-grid-container">
+    <!-- Featured News -->
+    <section class="International">
+      <img src="{{ url_for('static', filename='international.jpg') }}" alt="Trending">
+      <h2>Breaking: Popular Activist Charlie Krik has been shot</h2>
+      <p id="International-text">
+        American right-wing political activist, entrepreneur, and media personality Charlie Krik was shot
+        while speaking at a TPUSA public debate event on the Utah Valley University campus.
+      </p>
+    </section>
+
+    <!-- Sports -->
+    <section class="news-card">
+      <img src="{{ url_for('static', filename='international.jpg') }}" alt="Trending">
+      <h3>Sports: Big Match Ends Dramatically</h3>
+      <p id="sports-text">
+        The final match was intense, with both teams giving their best. The winning goal came in the last
+        minute, shocking the audience worldwide.
+      </p>
+    </section>
+
+    <!-- Entertainment -->
+    <section class="entertainment-card">
+      <img src="{{ url_for('static', filename='international.jpg') }}" alt="Trending">
+      <h4>Entertainment: Pawan Kalyan's Latest Release</h4>
+      <p id="entertainment-text">
+        Pawan Kalyan's new movie OG is releasing on 25th September, directed by Sujeeth and produced by
+        DVV Danayya under DVV Entertainments.
+      </p>
+    </section>
+
+    <!-- Tech -->
+    <section class="tech-card">
+      <img src="{{ url_for('static', filename='international.jpg') }}" alt="Trending">
+      <h4>Tech: AI Revolutionizes Healthcare</h4>
+      <p id="tech-text">
+        Artificial Intelligence is transforming healthcare by enabling faster diagnoses, personalized treatments, and improved patient outcomes across the globe.
+      </p>
+    </section>
+
+    <!-- Geopolitics -->
+    <section class="geopolitics-card">
+      <img src="{{ url_for('static', filename='international.jpg') }}" alt="Trending">
+      <h5>Geopolitics: New Trade Agreement Signed</h5>
+      <p id="geopolitics-text">
+        Trump raises tariffs on countries and in return China imposes counter tariffs.
+      </p>
+    </section>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Online News. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Simple Summarizer (keeps first sentence)
+    function summarize(id) {
+      let text = document.getElementById(id).innerText;
+      let firstSentence = text.split('.')[0] + ".";
+      document.getElementById(id).innerText = firstSentence;
+    }
+
+    // Simple Keyword Extractor
+    function extractKeywords(id) {
+      let text = document.getElementById(id).innerText.toLowerCase();
+      let words = text.split(/\W+/);
+      let stopwords = ["the","a","an","is","are","and","or","of","to","in","on","for","with","at","by","has","been"];
+      let freq = {};
+      words.forEach(w => {
+        if (w && !stopwords.includes(w)) {
+          freq[w] = (freq[w] || 0) + 1;
+        }
+      });
+      let keywords = Object.keys(freq).sort((a,b) => freq[b]-freq[a]).slice(0,3);
+      document.getElementById(id+"-keywords").innerText = "Keywords: " + keywords.join(", ");
+    }
+  </script>
+</body>
+</html>
