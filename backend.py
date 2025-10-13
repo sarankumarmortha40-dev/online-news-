@@ -31,6 +31,10 @@ def geopolitics():
 def tech():
     return render_template('tech.html')
 
+@app.route('/politics')
+def politics():
+    return render_template('politics.html')
+
 @app.route('/favicon')
 def favicon():
     return render_template('favicon.ico')
