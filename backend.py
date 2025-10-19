@@ -19,10 +19,6 @@ def entertainment():
 def sports():
     return render_template('sports.html')
 
-@app.route('/international')
-def international():
-    return render_template('international.html')
-
 @app.route('/geopolitics')
 def geopolitics():
     return render_template('geopolitics.html')
