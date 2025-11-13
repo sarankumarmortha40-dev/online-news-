@@ -5,9 +5,26 @@ import json
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-# Load news data from JSON file
-with open("news.json", "r", encoding="utf-8") as f:
-    news_data = json.load(f)
+# ---------------------------
+# SAFE NEWS LOADER (FIX HERE)
+# ---------------------------
+def load_news():
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    json_path = os.path.join(base_dir, "news.json")
+
+    if os.path.exists(json_path):
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            print("Error reading news.json:", e)
+            return {"data": []}
+    else:
+        print("⚠️ news.json NOT FOUND — using empty data")
+        return {"data": []}
+
+news_data = load_news()
+# -------------------------------------
 
 @app.route('/')
 def home():
