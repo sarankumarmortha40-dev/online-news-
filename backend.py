@@ -48,15 +48,23 @@ def sports():
 
 @app.route('/geopolitics')
 def geopolitics():
-    return render_template('geopolitics.html')
+   articles = [item for item in news_data["data"] if item["category"] == "geopolitics"]
+   return render_template('news.html', articles=articles, category_title="Geopolitics News")
 
 @app.route('/tech')
 def tech():
-    return render_template('tech.html')
+    articles = [item for item in news_data["data"] if item["category"] == "tech"]
+    return render_template('news.html', articles=articles, category_title="Tech News")
 
 @app.route('/politics')
 def politics():
-    return render_template('politics.html')
+    articles = [item for item in news_data["data"] if item["category"] == "politics"]
+    return render_template('news.html', articles=articles, category_title="Politics News")
+
+@app.route('/health')
+def health():
+    articles = [item for item in news_data["data"] if item["category"] == "health"]
+    return render_template('news.html', articles=articles, category_title="Health News")
 
 @app.route('/favicon')
 def favicon():
