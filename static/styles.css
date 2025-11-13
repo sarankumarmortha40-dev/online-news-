@@ -1,4 +1,4 @@
-/* Reset + base styles */
+/* Base Reset */
 * {
   margin: 0;
   padding: 0;
@@ -6,35 +6,47 @@
   font-family: Arial, sans-serif;
 }
 
+/* Body */
 body {
-  background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff; /* white background */
   color: #333;
   line-height: 1.6;
+  overflow-x: hidden; /* prevents horizontal scroll bar */
 }
 
-/* Header */
+/* ====== HEADER (Title Bar) ====== */
 header {
-  background: #222;
+  background: #111; /* solid blackish gray */
   color: #fff;
-  padding: 20px;
+  padding: 35px 20px;
   text-align: center;
+  width: 100%;
+  border-bottom: 3px solid #555;
+  margin: 0; /* ensures no gaps */
 }
 
 header h1 {
-  font-size: 2rem;
+  font-size: 2.3rem;
   margin-bottom: 5px;
+  color: #fbfaf7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 header p {
   font-size: 1rem;
-  color: #ddd;
+  color: #ccc;
 }
 
-/* Navigation bar */
+/* ====== NAVIGATION BAR ====== */
 nav {
-  background: #444;
-  padding: 12px;
+  background: #555; /* medium dark gray */
+  padding: 12px 0;
   text-align: center;
+  border-bottom: 3px solid #ebebe7;
+  width: 100%;
+  margin: 0; /* removes side gaps */
 }
 
 nav a {
@@ -46,117 +58,78 @@ nav a {
 }
 
 nav a:hover {
-  color: #ffd700;
+  color: #f8e408;
 }
 
-/* News Grid Container */
-.news-grid-container {
-  width: 90%;
-  margin: 20px auto;
-  display: grid;
+/* ====== NEWS SECTION (kept same) ====== */
+.news-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
-  grid-template-columns: 1fr;
+  margin: 30px auto;
+  width: 90%;
 }
 
-/* Featured News */
-.International {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-.International img {
-  width: 100%;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
-
-.International h2 {
-  margin: 10px 0;
-  font-size: 1.5rem;
-  color: #b30000;
-}
-
-/* General News Cards */
-.news-card, .entertainment-card, .tech-card, .geopolitics-card {
-  border-radius: 10px;
-  padding: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
-}
-
-/* Individual card backgrounds */
+/* ====== NEWS CARD ====== */
 .news-card {
-  background: #fff;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  width: 300px;
+  padding: 15px;
+  transition: 0.3s;
 }
 
-.entertainment-card {
-  background: #6a4444;
-}
-
-.tech-card {
-  background: #44506a;
-}
-
-.geopolitics-card {
-  background: #5a6a44;
-}
-
-/* Hover effect */
-.news-card:hover,
-.entertainment-card:hover,
-.tech-card:hover,
-.geopolitics-card:hover {
+.news-card:hover {
   transform: translateY(-5px);
 }
 
-/* Card images */
-.news-card img,
-.entertainment-card img,
-.tech-card img,
-.geopolitics-card img {
+/* Card Image */
+.news-card img {
   width: 100%;
   border-radius: 10px;
-  margin-bottom: 10px;
+  height: 180px;
+  object-fit: cover;
 }
 
-/* Card headings */
-.news-card h3,
-.entertainment-card h4,
-.tech-card h4,
-.geopolitics-card h5 {
-  font-size: 1.2rem;
-  margin: 10px 0;
+/* Card Title */
+.news-card h2 {
+  font-size: 18px;
+  color: #333;
+  margin-top: 10px;
 }
 
-.entertainment-card h4,
-.tech-card h4,
-.geopolitics-card h5 {
-  color: #fff;
-}
-
-/* Keywords display */
-.keywords {
-  margin-top: 8px;
-  font-size: 0.9rem;
+/* Card Text */
+.news-card p {
+  font-size: 14px;
   color: #555;
-  font-style: italic;
 }
 
-/* Footer */
+/* Read More Link */
+.news-card a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.news-card a:hover {
+  text-decoration: underline;
+}
+
+/* ====== FOOTER ====== */
 footer {
   text-align: center;
   padding: 20px;
-  background: #fffbfb;
-  color: #191818; /* fixed invalid hex color */
+  background: #f5f5f5;
+  color: #191818;
   margin-top: 20px;
   font-size: 0.9rem;
 }
 
-/* Responsive Layout */
-@media (min-width: 768px) {
-  .news-grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+/* ====== RESPONSIVE ====== */
+@media (max-width: 767px) {
+  nav a {
+    display: block;
+    margin: 10px 0;
   }
 }
