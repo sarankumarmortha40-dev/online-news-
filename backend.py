@@ -1,7 +1,13 @@
 from flask import Flask, render_template
 import os
+import json
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
+
+# Load news data from JSON file
+with open("news.json", "r", encoding="utf-8") as f:
+    news_data = json.load(f)
 
 @app.route('/')
 def home():
@@ -13,11 +19,15 @@ def world():
 
 @app.route('/entertainment')
 def entertainment():
-    return render_template('entertainment.html')
+    # Filter entertainment news
+    articles = [item for item in news_data["data"] if item["category"] == "entertainment"]
+    return render_template('news.html', articles=articles, category_title="Entertainment News")
 
 @app.route('/sports')
 def sports():
-    return render_template('sports.html')
+    # Filter sports news
+    articles = [item for item in news_data["data"] if item["category"] == "sports"]
+    return render_template('news.html', articles=articles, category_title="Sports News")
 
 @app.route('/geopolitics')
 def geopolitics():
@@ -35,6 +45,7 @@ def politics():
 def favicon():
     return render_template('favicon.ico')
 
+
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=port, debug=True)

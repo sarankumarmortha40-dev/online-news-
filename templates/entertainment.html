@@ -9,6 +9,19 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <p>ENTERTAINMENT NEWS PAGE</p>
+    <h1>{{ entertainment_title }}</h1>
+    {% for article in articles %}
+        <div style="margin-bottom:20px;">
+            <h2>{{ article.title }}</h2>
+            <p><strong>Source:</strong> {{ article.source }}</p>
+            <p>{{ article.description }}</p>
+            {% if article.image %}
+                <img src="{{ article.image }}" alt="Image" width="300">
+            {% endif %}
+            <br>
+            <a href="{{ article.url }}" target="_blank">Read more</a>
+        </div>
+        <hr>
+    {% endfor %}
 </body>
 </html>

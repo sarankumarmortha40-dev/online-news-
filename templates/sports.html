@@ -3,12 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SPORTS NEWS</title>
-  <!-- External CSS -->
+  <title>Sports News</title>
   <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <p>SPORTS NEWS PAGE</p>
+    <h1>{{ sports_title }}</h1>
+    {% if articles %}
+        {% for article in articles %}
+            <div style="margin-bottom:20px; padding: 10px; border: 1px solid #ccc;">
+                <h2>{{ article.title }}</h2>
+                {% if article.author %}
+                    <p><strong>Author:</strong> {{ article.author }}</p>
+                {% endif %}
+                <p><strong>Source:</strong> {{ article.source }}</p>
+                <p>{{ article.description }}</p>
+                {% if article.image %}
+                    <img src="{{ article.image }}" alt="Image" width="300">
+                {% endif %}
+                <br>
+                <a href="{{ article.url }}" target="_blank">Read more</a>
+            </div>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>No sports articles available.</p>
+    {% endif %}
 </body>
 </html>
