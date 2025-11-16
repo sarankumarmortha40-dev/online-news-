@@ -38,17 +38,20 @@
         <p><strong>By:</strong> {{ article.author or "Unknown" }}</p>
         <p>{{ article.description }}</p>
         <p><strong>Source:</strong> {{ article.source }}</p>
-        <a href="{{ article.url }}" target="_blank">Read more →</a>
+
+        <!-- FIXED: category is required for the route -->
+        <a href="{{ url_for('article_page', category=category, id=loop.index0) }}">
+          Read more →
+        </a>
       </div>
     {% endfor %}
   </div>
-
 
   <footer>
     <p>&copy; 2025 Online News. All rights reserved.</p>
   </footer>
 
-  <script>
+   <script>
     // Simple Summarizer (keeps first sentence)
     function summarize(id) {
       let text = document.getElementById(id).innerText;
