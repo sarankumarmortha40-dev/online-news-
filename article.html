@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ article.title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background: white;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+        img {
+            width: 100%;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>{{ article.title }}</h1>
+    <p><strong>By:</strong> {{ article.author }}</p>
+    <p><strong>Source:</strong> {{ article.source }}</p>
+
+    {% if article.image %}
+        <img src="{{ article.image }}" alt="">
+    {% endif %}
+
+    <!-- Full Article extracted text -->
+   <h2>Full Article</h2>
+<p>{{ full_content|safe }}</p>
+
+    </div>
+
+    <a class="back" href="/">⬅ Back to Home</a>
+</div>
+
+</body>
+</html>
