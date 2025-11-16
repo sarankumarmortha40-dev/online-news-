@@ -73,7 +73,10 @@
         <p><strong>By:</strong> {{ article.author or "Unknown" }}</p>
         <p>{{ article.description }}</p>
         <p><strong>Source:</strong> {{ article.source }}</p>
-        <a href="{{ article.url }}" target="_blank">Read more →</a>
+       <a href="{{ url_for('article_page', category=category, id=loop.index0) }}">
+    Read more →
+</a>
+
       </div>
     {% endfor %}
   </div>
