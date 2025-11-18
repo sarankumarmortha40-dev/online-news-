@@ -1,47 +1,145 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>{{ article.title }}</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
-            padding: 30px;
-            background: white;
+            margin: 30px;
+            line-height: 1.6;
         }
-        .container {
-            max-width: 900px;
-            margin: auto;
+
+        .llm-buttons button {
+            padding: 10px 16px;
+            background: #007bff;
+            border: none;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 10px;
         }
-        img {
-            width: 100%;
+
+        .llm-buttons button:hover {
+            background: #0056b3;
+        }
+
+        #llmOutput {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f7f7f7;
             border-radius: 10px;
-            margin: 20px 0;
+            min-height: 50px;
+            white-space: pre-wrap;
         }
-        .back {
-            display: inline-block;
-            margin-top: 20px;
+
+        select {
+            padding: 10px;
+            margin-right: 10px;
         }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <h1>{{ article.title }}</h1>
-    <p><strong>By:</strong> {{ article.author }}</p>
-    <p><strong>Source:</strong> {{ article.source }}</p>
+<h1>{{ article.title }}</h1>
+<p><em>Category: {{ category }}</em></p>
 
-    {% if article.image %}
-        <img src="{{ article.image }}" alt="">
-    {% endif %}
-
-    <!-- Full Article extracted text -->
-   <h2>Full Article</h2>
-<p>{{ full_content|safe }}</p>
-
-    </div>
-
-    <a class="back" href="/">⬅ Back to Home</a>
+<h3>Full Article</h3>
+<div id="fullArticleContent">
+    {{ full_content }}
 </div>
+
+<br>
+
+<!-- LLM BUTTONS AND LANGUAGE SELECTION -->
+<div class="llm-buttons">
+    <select id="languageSelect">
+        <option value="Hindi">Hindi</option>
+        <option value="Tamil">Tamil</option>
+        <option value="Kannada">Kannada</option>
+        <option value="Malayalam">Malayalam</option>
+        <option value="Telugu">Telugu</option>
+        <option value="Marathi">Marathi</option>
+        <option value="Bengali">Bengali</option>
+        <option value="Gujarati">Gujarati</option>
+        <option value="Odia">Odia</option>
+        <option value="Punjabi">Punjabi</option>
+        <option value="Urdu">Urdu</option>
+    </select>
+
+    <button onclick="summarize()">Summarize</button>
+    <button onclick="translateDynamic()">Translate</button>
+    <button onclick="explainSimple()">Explain Simply</button>
+</div>
+
+<!-- Output Box -->
+<div id="llmOutput">Result will appear here...</div>
+
+<script>
+const BACKEND_URL = "";
+
+function summarize() {
+    const text = document.getElementById("fullArticleContent").innerText;
+
+    fetch(`${BACKEND_URL}/summarize`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ text })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("llmOutput").innerText = " Summary:\n\n" + data.summary;
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("llmOutput").innerText = " Error summarizing. Check backend.";
+    });
+}
+
+function translateDynamic() {
+    const text = document.getElementById("fullArticleContent").innerText;
+    const language = document.getElementById("languageSelect").value;
+
+    fetch(`${BACKEND_URL}/translate`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ text, language })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("llmOutput").innerText =
+            `🌐 Translation (${language}):\n\n${data.translation}`;
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("llmOutput").innerText = "❌ Error translating. Check backend.";
+    });
+}
+
+function explainSimple() {
+    const text = document.getElementById("fullArticleContent").innerText;
+
+    fetch(`${BACKEND_URL}/explain`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ text })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("llmOutput").innerText =
+            "🔍 Simple Explanation:\n\n" + data.explanation;
+    })
+    .catch(err => {
+        console.error(err);
+        document.getElementById("llmOutput").innerText = "❌ Error explaining. Check backend.";
+    });
+}
+</script>
+
+<br><br>
+<a href="javascript:history.back()">⬅ Back</a>
 
 </body>
 </html>
