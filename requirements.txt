@@ -4,4 +4,9 @@ gunicorn==21.2.0
 fpdf==1.7.2
 requests==2.31.0
 trafilatura==1.6.3
+
+# Google Gemini (you are not using it now, but keeping for optional usage)
 google-generativeai==0.7.2
+
+# ---- Required for LLaMA through Groq API ----
+groq==0.13.0
