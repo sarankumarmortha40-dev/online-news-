@@ -1,7 +1,7 @@
 import requests
 
 # Your Render app base URL
-BASE_URL = "https://your-render-app-url.onrender.com"
+BASE_URL = "https://online-news-d80e.onrender.com/"
 
 # All categories you want to refresh
 CATEGORIES = [
