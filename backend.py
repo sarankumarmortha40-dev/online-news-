@@ -12,6 +12,8 @@ app.secret_key = "your_secret_key"
 # ----------------------------
 api_key = os.getenv("GROQ_API_KEY")
 
+print("DEBUG API KEY:", api_key)   # 🔍 Debug line
+
 if api_key:
     client = Groq(api_key=api_key)
 else:
@@ -41,11 +43,12 @@ def extract_full_article(url):
     return "Full article could not be extracted."
 
 # ----------------------------
-# SAFE AI CALL
+# SAFE AI CALL (WITH FALLBACK)
 # ----------------------------
 def call_llama(prompt):
+    # 🔥 Fallback if API key not set
     if not client:
-        return "⚠️ AI service not available"
+        return "This is a demo AI response for presentation."
 
     try:
         response = client.chat.completions.create(
@@ -55,7 +58,7 @@ def call_llama(prompt):
         return response.choices[0].message.content
     except Exception as e:
         print("Groq Error:", e)
-        return "⚠️ AI service failed"
+        return "This is a demo response (API failed)."
 
 # ----------------------------
 # AI ROUTES
