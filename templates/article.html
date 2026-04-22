@@ -114,7 +114,7 @@ function translateDynamic() {
     })
     .catch(err => {
         console.error(err);
-        document.getElementById("llmOutput").innerText = "❌ Error translating. Check backend.";
+        document.getElementById("llmOutput").innerText = " Error translating. Check backend.";
     });
 }
 
@@ -129,11 +129,11 @@ function explainSimple() {
     .then(res => res.json())
     .then(data => {
         document.getElementById("llmOutput").innerText =
-            "🔍 Simple Explanation:\n\n" + data.explanation;
+            " Simple Explanation:\n\n" + data.explanation;
     })
     .catch(err => {
         console.error(err);
-        document.getElementById("llmOutput").innerText = "❌ Error explaining. Check backend.";
+        document.getElementById("llmOutput").innerText = " Error explaining. Check backend.";
     });
 }
 </script>
