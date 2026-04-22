@@ -2,15 +2,21 @@ from flask import Flask, render_template, request, jsonify
 import os
 import json
 import trafilatura
-from groq import Groq   # <--- LLaMA client
+from groq import Groq
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
 
 # ----------------------------
-# GROQ LLaMA CONFIG
+# SAFE GROQ CONFIG
 # ----------------------------
-client = Groq(api_key=os.getenv("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"))
+api_key = os.getenv("GROQ_API_KEY")
+
+if api_key:
+    client = Groq(api_key=api_key)
+else:
+    client = None
+    print("⚠️ GROQ_API_KEY not set — AI disabled")
 
 # ----------------------------
 # LOAD JSON
@@ -30,29 +36,35 @@ def extract_full_article(url):
         downloaded = trafilatura.fetch_url(url)
         if downloaded:
             return trafilatura.extract(downloaded)
-    except:
-        pass
+    except Exception as e:
+        print("Error extracting article:", e)
     return "Full article could not be extracted."
 
 # ----------------------------
-# LLaMA ROUTES
+# SAFE AI CALL
 # ----------------------------
 def call_llama(prompt):
-    response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
-        messages=[
-            {"role": "user", "content": prompt}
-        ]
-    )
-    return response.choices[0].message.content
+    if not client:
+        return "⚠️ AI service not available"
 
+    try:
+        response = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return response.choices[0].message.content
+    except Exception as e:
+        print("Groq Error:", e)
+        return "⚠️ AI service failed"
 
+# ----------------------------
+# AI ROUTES
+# ----------------------------
 @app.route("/translate", methods=["POST"])
 def translate():
-    print("Translate route hit!")
-    data = request.json
-    text = data["text"]
-    lang = data["language"]
+    data = request.get_json()
+    text = data.get("text", "")
+    lang = data.get("language", "English")
 
     prompt = f"Translate this article into {lang}:\n\n{text}"
     result = call_llama(prompt)
@@ -61,8 +73,8 @@ def translate():
 
 @app.route("/summarize", methods=["POST"])
 def summarize():
-    print("Summarize route hit!")
-    text = request.json["text"]
+    data = request.get_json()
+    text = data.get("text", "")
 
     prompt = f"Summarize this news in 3 simple lines:\n\n{text}"
     result = call_llama(prompt)
@@ -71,8 +83,8 @@ def summarize():
 
 @app.route("/explain", methods=["POST"])
 def explain():
-    print("Explain route hit!")
-    text = request.json["text"]
+    data = request.get_json()
+    text = data.get("text", "")
 
     prompt = f"Explain this news in simple words:\n\n{text}"
     result = call_llama(prompt)
@@ -80,7 +92,7 @@ def explain():
     return jsonify({"explanation": result})
 
 # ----------------------------
-# CATEGORY ROUTES
+# ROUTES
 # ----------------------------
 @app.route("/")
 def home():
@@ -118,7 +130,7 @@ def health():
     return render_template("health.html", articles=data["data"], category="health")
 
 # ----------------------------
-# FULL ARTICLE PAGE
+# ARTICLE PAGE
 # ----------------------------
 @app.route("/article/<category>/<int:id>")
 def article_page(category, id):
@@ -128,12 +140,23 @@ def article_page(category, id):
         return "Article not found", 404
 
     article = data["data"][id]
-    full_content = extract_full_article(article["url"])
+    full_content = extract_full_article(article.get("url", ""))
 
-    return render_template("article.html", article=article, full_content=full_content, category=category)
+    return render_template("article.html",
+                           article=article,
+                           full_content=full_content,
+                           category=category)
 
 # ----------------------------
-# RUN SERVER
+# HEALTH CHECK
+# ----------------------------
+@app.route("/health-check")
+def health_check():
+    return "OK", 200
+
+# ----------------------------
+# RUN
 # ----------------------------
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000, debug=True)
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host="0.0.0.0", port=port)

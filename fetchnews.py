@@ -1,19 +1,18 @@
 import requests
-import json
 import os
+from db import supabase   # <-- IMPORTANT: import connection to Supabase
 
 # ----------------------------------------
 # MEDiASTACK API KEY
 # ----------------------------------------
-MEDIASTACK_API_KEY = os.getenv("a0a7b8c9114a89994e10b2a916dfd857") 
+MEDIASTACK_API_KEY = os.getenv("MEDIASTACK_KEY") or "YOUR_MEDIASTACK_API_KEY"
 
 # ----------------------------------------
-# CATEGORY MAP:
-# Your frontend categories -> Mediastack categories
+# CATEGORY MAP
 # ----------------------------------------
 CATEGORY_MAP = {
     "news": "general",
-    "world": "general",        # Mediastack has no "world" category
+    "world": "general",
     "sports": "sports",
     "tech": "technology",
     "entertainment": "entertainment",
@@ -22,13 +21,9 @@ CATEGORY_MAP = {
 }
 
 # ----------------------------------------
-# FETCH NEWS FROM MEDiASTACK
+# FETCH NEWS FROM MEDiASTACK API
 # ----------------------------------------
 def fetch_mediastack_news(category):
-    """
-    category = your website category (news/sports/etc.)
-    """
-
     if category not in CATEGORY_MAP:
         print("Invalid category:", category)
         return []
@@ -55,21 +50,29 @@ def fetch_mediastack_news(category):
 
     for item in response["data"]:
         final_list.append({
+            "category": category,
             "title": item.get("title", "No Title"),
             "description": item.get("description", ""),
             "url": item.get("url", "#"),
-            "img": item.get("image") or "/static/no-image.png"
+            "image": item.get("image") or "https://via.placeholder.com/300x200?text=No+Image"
         })
 
     return final_list
 
 
 # ----------------------------------------
-# SAVE JSON
+# SAVE NEWS TO SUPABASE
 # ----------------------------------------
-def save_news_to_json(category, news_list):
-    file_path = f"{category}.json"
-    with open(file_path, "w", encoding="utf-8") as f:
-        json.dump({"data": news_list}, f, indent=4, ensure_ascii=False)
+def save_news_to_db(category, news_list):
+    if not news_list:
+        print("No news to save for", category)
+        return
 
-    print(f"Saved {len(news_list)} articles to {file_path}")
+    print(f"Saving {len(news_list)} articles to Supabase...")
+
+    # Insert into supabase table
+    response = supabase.table("news").insert(news_list).execute()
+
+    print("Supabase response:", response)
+
+
