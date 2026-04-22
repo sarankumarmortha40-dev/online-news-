@@ -133,3 +133,36 @@ footer {
     margin: 10px 0;
   }
 }
+/* 🔥 Mobile First Grid */
+.news-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* Tablet */
+@media (min-width: 600px) {
+  .news-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Laptop */
+@media (min-width: 992px) {
+  .news-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Navbar mobile */
+@media (max-width: 768px) {
+  .navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar a {
+    margin: 10px 0;
+  }
+}
