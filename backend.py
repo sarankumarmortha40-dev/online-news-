@@ -3,7 +3,6 @@ import os
 import json
 import trafilatura
 from groq import Groq   # <--- LLaMA client
-from fetchnews import fetch_mediastack_news, save_news_to_json
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -11,8 +10,7 @@ app.secret_key = "your_secret_key"
 # ----------------------------
 # GROQ LLaMA CONFIG
 # ----------------------------
-client = Groq(api_key="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")
-
+client = Groq(api_key=os.getenv("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"))
 
 # ----------------------------
 # LOAD JSON
@@ -48,6 +46,7 @@ def call_llama(prompt):
     )
     return response.choices[0].message.content
 
+
 @app.route("/translate", methods=["POST"])
 def translate():
     print("Translate route hit!")
@@ -79,21 +78,6 @@ def explain():
     result = call_llama(prompt)
 
     return jsonify({"explanation": result})
-#----------------------------
-#uPDATE NEWS DATA
-#----------------------------
-
-@app.route("/update-news/<category>")
-def update_news(category):
-    valid_categories = ["news", "world", "sports", "politics", "health", "tech", "entertainment"]
-
-    if category not in valid_categories:
-        return "Invalid category", 400
-
-    latest_news = fetch_mediastack_news(category)
-    save_news_to_json(category, latest_news)
-
-    return f"{category.upper()} updated successfully!"
 
 # ----------------------------
 # CATEGORY ROUTES
