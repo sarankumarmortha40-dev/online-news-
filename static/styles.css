@@ -39,26 +39,36 @@ header p {
   color: #ccc;
 }
 
-/* ====== NAVIGATION BAR ====== */
+/* ===== NAVBAR (DESKTOP) ===== */
 nav {
-  background: #555; /* medium dark gray */
-  padding: 12px 0;
-  text-align: center;
+  background: #555;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px;
   border-bottom: 3px solid #ebebe7;
-  width: 100%;
-  margin: 0; /* removes side gaps */
 }
 
 nav a {
-  color: #fff;
-  margin: 0 15px;
+  color: white;
   text-decoration: none;
   font-weight: bold;
-  transition: color 0.3s ease;
+  padding: 5px 10px;
 }
 
-nav a:hover {
-  color: #f8e408;
+/* ===== MOBILE NAVBAR ===== */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: row;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  nav a {
+    display: inline-block;
+    font-size: 14px;
+    padding: 8px 12px;
+  }
 }
 
 /* ====== NEWS SECTION (kept same) ====== */
